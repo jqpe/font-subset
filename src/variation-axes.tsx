@@ -45,33 +45,31 @@ export const VariationAxesControls: React.FC<VariationAxesControlsProps> = ({
   }
 
   return (
-    <div className="max-w-md">
+    <section className="card">
       <h3 className="mb-2">Font Variation Axes</h3>
+
       {axes.map(axis => (
-        <div key={axis.tag} className="mb-4">
-          <div className="flex justify-between">
-            <label htmlFor={`axis-${axis.tag}`} className="font-medium">
-              {axis.tag}
-            </label>
-            <span>{values[axis.tag]?.toFixed(2)}</span>
-          </div>
+        <div key={axis.tag} className="axis-input">
+          <label htmlFor={`axis-${axis.tag}`}>{axis.tag}</label>
+
+          <span>{axis.min_value?.toFixed(1)}</span>
+
           <input
             id={`axis-${axis.tag}`}
             type="range"
             min={axis.min_value}
             max={axis.max_value}
             step={getStep((axis.max_value - axis.min_value) / 100)}
-            value={values[axis.tag] || axis.def_value}
+            value={values[axis.tag] ?? axis.def_value}
             onChange={e => handleChange(axis.tag, parseFloat(e.target.value))}
             className="w-full track:min-h-2"
           />
-          <div className="flex justify-between text-xs text-gray-500">
-            <span>{axis.min_value.toFixed(1)}</span>
-            <span>{axis.max_value.toFixed(1)}</span>
-          </div>
+
+          <span>{axis.max_value.toFixed(1)}</span>
+          <span className="ml-2">{values[axis.tag]?.toFixed(1)}</span>
         </div>
       ))}
-    </div>
+    </section>
   )
 }
 

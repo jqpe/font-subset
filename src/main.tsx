@@ -9,8 +9,11 @@ const queryClient = new QueryClient({
     queries: {
       throwOnError: true,
       retry: false,
-    },
-  },
+      networkMode: 'offlineFirst',
+      staleTime: Infinity,
+      refetchOnWindowFocus: false
+    }
+  }
 })
 
 createRoot(document.getElementById('root')!).render(

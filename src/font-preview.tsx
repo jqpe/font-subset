@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import React, { useEffect, useState } from 'react'
+import { getFontFace } from './utils'
 
 interface FontPreviewProps {
   fontUrl: string
@@ -17,23 +18,7 @@ export const FontPreview: React.FC<FontPreviewProps> = ({
   const [fontFace, setFontFace] = useState<FontFace | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const getFontFace = async (url: string): Promise<FontFace> => {
-    return url.startsWith('blob:')
-      ? new FontFace('PreviewFont', await (await fetch(url)).arrayBuffer())
-      : new FontFace('PreviewFont', `url(${url})`)
-  }
-
-  const editor = useEditor({
-    extensions: [StarterKit, Typography],
-    content: /* HTML */ `
-      <h1>${sampleText}</h1>
-      <h2>${sampleText}</h2>
-      <h3>${sampleText}</h3>
-      <h4>${sampleText}</h4>
-      <h5>${sampleText}</h5>
-      <h6>${sampleText}</h6>
-    `
-  })
+  const editor = useEditor({ extensions: [StarterKit, Typography] })
 
   // Load the font when fontUrl changes
   useEffect(() => {
@@ -56,17 +41,9 @@ export const FontPreview: React.FC<FontPreviewProps> = ({
     loadFont()
   }, [fontUrl])
 
-  // Update editor content when sampleText changes
   useEffect(() => {
     if (editor && !error) {
-      editor.commands.setContent(/* HTML */ `
-        <h1>${sampleText}</h1>
-        <h2>${sampleText}</h2>
-        <h3>${sampleText}</h3>
-        <h4>${sampleText}</h4>
-        <h5>${sampleText}</h5>
-        <h6>${sampleText}</h6>
-      `)
+      editor.commands.setContent(/* HTML */ ` <p>${sampleText}</p> `)
     }
   }, [editor, sampleText, error])
 
@@ -79,20 +56,24 @@ export const FontPreview: React.FC<FontPreviewProps> = ({
     }
   }, [fontFace])
 
-  // Generate the CSS for font-variation-settings
-  const fontVariationSettingsCSS = Object.entries(variationSettings || {})
+  // TODO: modify to avoid collisions (wdth is standard for one)
+  const fallbackVariations = { wdth: 1000, HGHT: 1000 } as const
+  const fontVariationSettingsCSS = Object.entries({
+    ...variationSettings,
+    ...fallbackVariations
+  })
     .map(([tag, value]) => `"${tag}" ${value}`)
     .join(', ')
 
   return (
     <div
-      className="font-preview"
+      className="font-preview card"
       style={{ fontFamily: 'PreviewFont, AdobeBlack' }}
     >
       <style>
         {`
           .ProseMirror {
-            font-variation-settings: ${fontVariationSettingsCSS}${fontVariationSettingsCSS ? ', ' : ''}"HGHT" 1000, "wdth" 1000;
+            font-variation-settings: ${fontVariationSettingsCSS};
           }
           
           .ProseMirror h1 {

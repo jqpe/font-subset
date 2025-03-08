@@ -2,28 +2,12 @@ import init from 'harfbuzzjs/hb-subset.wasm?init'
 import { metadata } from '../src-metadata/pkg'
 import { decompress } from 'woff2-encoder'
 import prettyBytes from 'pretty-bytes'
+import { isWoff2Font } from './utils'
 
 const instance = await init()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const hb = instance.exports as any
 const heapu8 = new Uint8Array(hb.memory.buffer)
-
-/** @see https://www.w3.org/TR/WOFF2/#woff20Header-0 */
-function isWoff2Font(fontData: Uint8Array | ArrayBuffer): boolean {
-  const data =
-    fontData instanceof ArrayBuffer ? new Uint8Array(fontData) : fontData
-
-  // Check for WOFF2 signature in first 4 bytes
-  // WOFF2 files start with the signature 'wOF2' (0x774F4632)
-  if (data.length < 4) return false
-
-  return (
-    data[0] === 0x77 && // 'w'
-    data[1] === 0x4f && // 'O'
-    data[2] === 0x46 && // 'F'
-    data[3] === 0x32 // '2'
-  )
-}
 
 interface SubsetFontResult {
   // TODO: implement TypeScript magic Rust side (doable)
@@ -50,28 +34,36 @@ export async function subsetFont(
   const byteLength = fontData.length
 
   if (isWoff2Font(originalFont)) {
-    console.log('Detected font to be a woff2 font, converting to uncompressed')
-    console.time('woff2-conversion')
+    console.log('Detected font to be a woff2 font, decompressing')
+    console.time('woff2-decompress')
     fontData = await decompress(originalFont)
     console.timeLog(
-      'woff2-conversion',
+      'woff2-decompress',
       'original: ' + prettyBytes(originalFont.byteLength),
       'converted:' + prettyBytes(fontData.byteLength)
     )
   }
 
+  console.time('resource-initialization')
   const { fontBuffer, face, input } = initializeResources(fontData)
+  console.timeEnd('resource-initialization')
 
+  console.time('input-configuration')
   configureSubsetInput(input, face, text, options)
+  console.timeEnd('input-configuration')
 
   return {
     metadata: metadata(fontData),
     byteLength,
     subset() {
+      console.time('subset-creation')
       try {
         return createSubsetFont(face, input)
       } finally {
+        console.time('resource-cleanup')
         cleanupResources(input, face, fontBuffer)
+        console.timeEnd('resource-cleanup')
+        console.timeEnd('subset-creation')
       }
     }
   }

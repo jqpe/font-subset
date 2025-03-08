@@ -1,26 +1,9 @@
-import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { subsetFont } from './lib'
-import { metadata } from '../src-metadata/pkg'
+import { useEffect, useState } from 'react'
 import { compress } from 'woff2-encoder'
-
-/**
- * @param unicodeRange E.g. 0000-007f or F-1F (without U+ as sometimes seen)
- * Accepts hex values of up to 4 digits in length
- */
-const toTextFromUnicode = (unicodeRange: string): string => {
-  const [start, end] = unicodeRange.split('-')
-
-  const startCode = parseInt(start, 16)
-  const endCode = parseInt(end, 16)
-
-  const codes = Array.from(
-    { length: endCode - startCode + 1 },
-    (_, i) => startCode + i
-  )
-
-  return String.fromCharCode(...codes)
-}
+import { metadata } from '../src-metadata/pkg'
+import { subsetFont } from './lib'
+import { toTextFromUnicode } from './utils'
 
 // https://unicode.link/blocks/basic-latin
 const DEFAULT_TEXT = toTextFromUnicode('0-007F')
@@ -68,34 +51,45 @@ export const useDrop = () => {
 
 export const useProcessFont = (file: File | undefined, text = DEFAULT_TEXT) => {
   const { data, isLoading } = useQuery({
-    queryKey: [file?.name, file?.size, file?.lastModified, text],
+    queryKey: [file?.name, text],
     enabled: !!file,
     queryFn: async () => {
       if (!file) return null
 
-      const {
-        byteLength,
-        metadata: originalMetadata,
-        subset
-      } = await subsetFont(await file.arrayBuffer(), text)
-      const fontRawData = subset()
-      const subsetMetadata = metadata(fontRawData)
-      const fontCompressedData = await compress(fontRawData)
+      console.group(`Subsetting ${file.name}`)
+      try {
+        console.time('subset-total')
 
-      const blob = new Blob([fontCompressedData], {
-        type: 'font/woff2'
-      })
-      const downloadUrl = URL.createObjectURL(blob)
-      const fileName = file.name.replace(/(\.[^.]+)$/, '-subset$1')
+        const {
+          byteLength,
+          metadata: originalMetadata,
+          subset
+        } = await subsetFont(await file.arrayBuffer(), text)
+        const fontRawData = subset()
+        const subsetMetadata = metadata(fontRawData)
 
-      return {
-        downloadUrl,
-        fileName,
-        original: { metadata: originalMetadata, byteLength },
-        subset: {
-          metadata: subsetMetadata,
-          byteLength: fontCompressedData.byteLength
+        console.time('woff2-compress')
+        const fontCompressedData = await compress(fontRawData)
+        console.timeEnd('woff2-compress')
+
+        const blob = new Blob([fontCompressedData], {
+          type: 'font/woff2'
+        })
+        const downloadUrl = URL.createObjectURL(blob)
+        const fileName = file.name.replace(/(\.[^.]+)$/, '-subset$1')
+
+        return {
+          downloadUrl,
+          fileName,
+          original: { metadata: originalMetadata, byteLength },
+          subset: {
+            metadata: subsetMetadata,
+            byteLength: fontCompressedData.byteLength
+          }
         }
+      } finally {
+        console.timeEnd('subset-total')
+        console.groupEnd()
       }
     }
   })
