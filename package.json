@@ -21,6 +21,7 @@
     "harfbuzzjs": "^0.4.4",
     "lit": "^3.2.1",
     "pretty-bytes": "^6.1.1",
+    "prosemirror-state": "^1.4.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-error-boundary": "^5.0.0",

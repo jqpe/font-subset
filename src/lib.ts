@@ -40,7 +40,7 @@ export async function subsetFont(
     console.timeLog(
       'woff2-decompress',
       'original: ' + prettyBytes(originalFont.byteLength),
-      'converted:' + prettyBytes(fontData.byteLength)
+      'converted: ' + prettyBytes(fontData.byteLength)
     )
   }
 
@@ -206,8 +206,7 @@ function configureVariationAxisRange(
     )
   ) {
     throw new Error(
-      `Can not set the range of ${axisName} to [${value.min}; ${value.max}] with a default value of ${value.default}.\
-       Maybe the axis does not exist in the font?`
+      `Can not set the range of ${axisName}. Maybe the axis does not exist in the font?`
     )
   }
 }

@@ -86,24 +86,42 @@ export const isWoff2Font = (fontData: Uint8Array | ArrayBuffer): boolean => {
  */
 export const toTextFromUnicode = (unicodeRange: string): string => {
   const ranges = unicodeRange.split(',').map(r => r.trim())
+  const includedCodes = new Set<number>()
+  const excludedCodes = new Set<number>()
 
-  const codes = ranges.flatMap(range => {
-    if (!range.includes('-')) {
-      return [parseInt(range, 16)]
+  ranges.forEach(range => {
+    const isExclusion = range.startsWith('!')
+    const cleanRange = range.replace('!', '')
+
+    if (!cleanRange.includes('-')) {
+      const code = parseInt(cleanRange, 16)
+      if (isExclusion) {
+        excludedCodes.add(code)
+      } else {
+        includedCodes.add(code)
+      }
+      return
     }
 
-    const [start, end] = range.split('-')
+    const [start, end] = cleanRange.split('-')
     const startCode = parseInt(start, 16)
     const endCode = parseInt(end, 16)
 
-    return Array.from(
+    Array.from(
       { length: endCode - startCode + 1 },
       (_, i) => startCode + i
-    )
+    ).forEach(code => {
+      if (isExclusion) {
+        excludedCodes.add(code)
+      } else {
+        includedCodes.add(code)
+      }
+    })
   })
+  const finalCodes = [...includedCodes].filter(code => !excludedCodes.has(code))
 
   return (
-    String.fromCharCode(...codes)
+    String.fromCharCode(...finalCodes)
       .match(/[^\p{Cc}]/gu)
       ?.join('') || ''
   )

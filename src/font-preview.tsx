@@ -3,6 +3,7 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React, { useEffect, useState } from 'react'
 import { getFontFace } from './utils'
+import { UnicodeInput } from './extensions/unicode-input'
 
 interface FontPreviewProps {
   fontUrl: string
@@ -18,7 +19,15 @@ export const FontPreview: React.FC<FontPreviewProps> = ({
   const [fontFace, setFontFace] = useState<FontFace | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const editor = useEditor({ extensions: [StarterKit, Typography] })
+  const editor = useEditor({
+    extensions: [StarterKit, Typography, UnicodeInput],
+    editorProps: {
+      attributes: {
+        class:
+          'p-2 block whitespace-pre-wrap relative focus-visible:outline-hidden'
+      }
+    }
+  })
 
   // Load the font when fontUrl changes
   useEffect(() => {
@@ -80,12 +89,8 @@ export const FontPreview: React.FC<FontPreviewProps> = ({
             font-size: 2em;
           }
         `}
-      </style>{' '}
-      {error ? (
-        <div className="error">{error}</div>
-      ) : (
-        <EditorContent editor={editor} />
-      )}
+      </style>
+      {error ? <div>{error}</div> : <EditorContent editor={editor} />}
     </div>
   )
 }

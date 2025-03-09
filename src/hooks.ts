@@ -51,7 +51,7 @@ export const useDrop = () => {
 
 export const useProcessFont = (file: File | undefined, text = DEFAULT_TEXT) => {
   const { data, isLoading } = useQuery({
-    queryKey: [file?.name, text],
+    queryKey: [file?.name],
     enabled: !!file,
     queryFn: async () => {
       if (!file) return null
