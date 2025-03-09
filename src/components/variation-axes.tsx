@@ -45,7 +45,7 @@ export const VariationAxesControls: React.FC<VariationAxesControlsProps> = ({
   }
 
   return (
-    <section className="card">
+    <section className="card card-full">
       <h3 className="mb-2">Font Variation Axes</h3>
 
       {axes.map(axis => (

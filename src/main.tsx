@@ -11,6 +11,7 @@ const queryClient = new QueryClient({
       retry: false,
       networkMode: 'offlineFirst',
       staleTime: Infinity,
+      refetchOnReconnect: false,
       refetchOnWindowFocus: false
     }
   }

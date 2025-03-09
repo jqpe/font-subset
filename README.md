@@ -6,7 +6,7 @@ font-subset will create a subset of your font, including only the glyphs needed 
 
 These limitations may change in the future. Star github.com/jqpe/font-subset for updates!
 
-- Only characters in the [Basic Multilingual Plane (BMP)](<https://en.wikipedia.org/wiki/Plane_(Unicode)#Overview>) are supported. This means subsetting emoji or icon fonts is often not possible.
+- Only characters in the [Basic Multilingual Plane (BMP)](<https://en.wikipedia.org/wiki/Plane_(Unicode)#Overview>) are supported. This means subsetting emoji is often not possible. Popular icon fonts use the E000–F8FF private use area, so subsetting them is possible.
 - Only a single font can be processed at a time. If multiple files were dropped, the last will be used.
 - All variable axes will be kept as in the original.
 - The font is automatically converted to Woff2 format.

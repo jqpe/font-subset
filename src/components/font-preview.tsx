@@ -2,8 +2,8 @@ import Typography from '@tiptap/extension-typography'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React, { useEffect, useState } from 'react'
-import { getFontFace } from './utils'
-import { UnicodeInput } from './extensions/unicode-input'
+import { getFontFace } from '../utils'
+import { UnicodeInput } from '../extensions/unicode-input'
 
 interface FontPreviewProps {
   fontUrl: string
@@ -56,11 +56,10 @@ export const FontPreview: React.FC<FontPreviewProps> = ({
     }
   }, [editor, sampleText, error])
 
-  // Cleanup function to remove the font when component unmounts
   useEffect(() => {
     return () => {
       if (fontFace && document.fonts.has(fontFace)) {
-        document.fonts.delete(fontFace)
+        console.log('deleting fontface', document.fonts.delete(fontFace))
       }
     }
   }, [fontFace])
@@ -90,7 +89,7 @@ export const FontPreview: React.FC<FontPreviewProps> = ({
           }
         `}
       </style>
-      {error ? <div>{error}</div> : <EditorContent editor={editor} />}
+      {error ? <div className='font-sans'>{error}</div> : <EditorContent editor={editor} />}
     </div>
   )
 }

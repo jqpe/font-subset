@@ -10,6 +10,11 @@ pub struct VariationAxis {
     pub max_value: f32,
     pub def_value: f32,
 }
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UnicodeRange {
+    pub start: u32,
+    pub end: u32,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Font {
@@ -20,6 +25,7 @@ pub struct Font {
     pub glyph_count: u16,
     pub is_variable: bool,
     pub variation_axes: Vec<VariationAxis>,
+    pub unicode_ranges: Vec<UnicodeRange>,
 }
 
 type FontDefinitions = Vec<Font>;
@@ -56,6 +62,31 @@ pub fn metadata(data: Vec<u8>) -> JsValue {
                 }
             }
 
+            let mut unicode_ranges = Vec::new();
+            let mut range_start = None;
+            let mut prev_codepoint = None;
+
+            for cp in 0..=0xFFFF {
+                if face.glyph_index(char::from_u32(cp).unwrap_or('\u{FFFD}')) != None {
+                    if range_start.is_none() {
+                        range_start = Some(cp);
+                    }
+                    prev_codepoint = Some(cp);
+                } else if let (Some(start), Some(prev)) = (range_start, prev_codepoint) {
+                    if cp > prev + 1 {
+                        unicode_ranges.push(UnicodeRange { start, end: prev });
+                        range_start = None;
+                    }
+                }
+            }
+
+            if let (Some(start), Some(prev)) = (range_start, prev_codepoint) {
+                unicode_ranges.push(UnicodeRange {
+                    start: start,
+                    end: prev,
+                });
+            }
+
             fonts.push(Font {
                 names,
                 italic: face.is_italic(),
@@ -64,6 +95,7 @@ pub fn metadata(data: Vec<u8>) -> JsValue {
                 glyph_count: face.number_of_glyphs(),
                 is_variable,
                 variation_axes,
+                unicode_ranges,
             });
         }
     }

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { compress } from 'woff2-encoder'
 import { metadata } from '../src-metadata/pkg'
 import { subsetFont } from './lib'
@@ -8,8 +8,20 @@ import { toTextFromUnicode } from './utils'
 // https://unicode.link/blocks/basic-latin
 const DEFAULT_TEXT = toTextFromUnicode('0-007F')
 
+import { create } from 'zustand/react'
+
+interface FileStore {
+  file: File | undefined
+  setFile: (file: File | undefined) => void
+}
+
+export const useFileStore = create<FileStore>()(set => ({
+  file: undefined,
+  setFile: file => set({ file })
+}))
+
 export const useDrop = () => {
-  const [file, setFile] = useState<File>()
+  const { file, setFile } = useFileStore()
 
   useEffect(() => {
     const dropHandler = (event: DragEvent) => {
@@ -44,14 +56,14 @@ export const useDrop = () => {
       document.removeEventListener('dragleave', dragLeaveHandler)
       document.removeEventListener('drop', dropHandler)
     }
-  }, [])
+  }, [setFile])
 
   return file
 }
 
 export const useProcessFont = (file: File | undefined, text = DEFAULT_TEXT) => {
   const { data, isLoading } = useQuery({
-    queryKey: [file?.name],
+    queryKey: ['process-font', file?.name],
     enabled: !!file,
     queryFn: async () => {
       if (!file) return null

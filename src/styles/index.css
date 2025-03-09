@@ -26,34 +26,15 @@
 }
 
 #root {
-  min-height: 100vh;
+  overflow: scroll;
+  height: 100vh;
+  position: relative;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-}
-
-main {
-  height: 100%;
-  grid-column: 2 / 10;
-  grid-row: 1 / 10;
-  padding-block: 2rem;
 }
 
 p {
   margin-block: 0.25rem;
-}
-
-.download-button {
-  display: block;
-  width: max-content;
-  text-decoration: none;
-  max-height: fit-content;
-  color: inherit;
-  padding: 0.5rem 1rem;
-  background: var(--foreground-color);
-  color: var(--background-color);
-  border-radius: 9999px;
-  grid-column: 2;
 }
 
 /* See https://github.com/adobe-fonts/adobe-blank-vf */
@@ -71,24 +52,14 @@ p {
   padding-inline-end: 1rem;
 }
 
-#download {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  padding-block: 1rem;
-}
-
-@media only screen and (max-width: 700px) {
-  #download {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
 .card {
   padding: 1rem;
   box-shadow: 0px 0px 0.1rem #b0b0b0;
   border-radius: 1rem;
+}
+
+.card.card-full {
+  grid-column: span 2;
 }
 
 [role='separator'][aria-orientation='vertical'] {
