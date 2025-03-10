@@ -94,7 +94,7 @@ export const toTextFromUnicode = (unicodeRange: string): string => {
     const cleanRange = range.replace('!', '')
 
     if (!cleanRange.includes('-')) {
-      const code = parseInt(cleanRange, 16)
+      const code = Math.min(parseInt(cleanRange, 16), 0xffff)
       if (isExclusion) {
         excludedCodes.add(code)
       } else {
@@ -104,8 +104,8 @@ export const toTextFromUnicode = (unicodeRange: string): string => {
     }
 
     const [start, end] = cleanRange.split('-')
-    const startCode = parseInt(start, 16)
-    const endCode = parseInt(end, 16)
+    const startCode = Math.min(parseInt(start, 16), 0xffff)
+    const endCode = Math.min(parseInt(end, 16), 0xffff)
 
     Array.from(
       { length: endCode - startCode + 1 },

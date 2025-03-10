@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { CharacterGroup as CharGroup } from './character-grouping'
 import { GridCharButton } from './grid-character'
 
@@ -29,19 +29,24 @@ export const CharacterGroupComponent: React.FC<CharacterGroupProps> = ({
   handlePointerUp,
   file
 }) => {
+  const [open, setOpen] = useState(false)
   const filteredChars = group.chars.filter(
     char => !showOnlySupported || isCodepointSupported(char.codePointAt(0) || 0)
   )
 
   return (
-    <details className="w-full bg-gray-400/10 p-2 group">
+    <details
+      open={open}
+      onToggle={() => setOpen(!open)}
+      className="w-full bg-gray-400/10 p-2 group"
+    >
       <summary className="flex select-none">
         <h3 className="text-sm font-medium text-gray-700">
           {group.name} ({filteredChars.length})
         </h3>
       </summary>
       <div className="flex flex-wrap gap-1 group-open:my-2">
-        {filteredChars.map(char => {
+        {(open ? filteredChars : []).map(char => {
           const codePoint = char.codePointAt(0) || 0
           const isInRegularSelection =
             isSelecting &&
@@ -51,7 +56,8 @@ export const CharacterGroupComponent: React.FC<CharacterGroupProps> = ({
             codePoint >= Math.min(selectionRange.start, selectionRange.end) &&
             codePoint <= Math.max(selectionRange.start, selectionRange.end)
 
-          const isInAdditionalSelection = additionalSelections.includes(codePoint)
+          const isInAdditionalSelection =
+            additionalSelections.includes(codePoint)
 
           return (
             <GridCharButton

@@ -26,7 +26,7 @@ export const GridCharButton: React.FC<GridCharButtonProps> = ({
     <button
       data-in-selection={isInSelection}
       className={
-        'flex flex-col items-center gap-0.5 border border-gray-300 w-8 rounded-sm p-1 transition-colors duration-300 hover:bg-red-200 data-[in-selection="true"]:bg-red-200 select-none'
+        'flex flex-col items-center gap-1 border border-gray-300 w-8 rounded-sm p-1 transition-colors duration-300 hover:bg-red-200 data-[in-selection="true"]:bg-red-200 select-none'
       }
       onPointerDown={() => handlePointerDown(codePoint, group.name)}
       onPointerMove={() => handlePointerMove(codePoint, group.name)}
