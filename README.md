@@ -15,7 +15,7 @@ These limitations may change in the future. Star https://github.com/jqpe/font-su
 
 ## Usage
 
-1. Define the charactes you want to keep. You might find it beneficial to start with unicode blocks (see https://unicode.link/blocks for example) and then use the text input to add additional characters.
+1. Define the charactes you want to keep. You might find it beneficial to start with unicode blocks (see https://unicode.link/blocks for example) and then use the grid to trim the input down.
    1. Do not put U+ or anything else before the Unicode ranges (or a single Unicode codepoint)
    2. `0x00FF = 0xFF`, but `0xE000 != 0xe0`
    3. Syntax: `0-7f, fffd, 80-ff` will include Basic Latin, the Replacement character (�), and Latin-1 Supplement. You can also exclude characters or ranges by prefixing with `!`: `0-7f, !20-2f, !60` for Basic Latin without punctuation and grave accent.
