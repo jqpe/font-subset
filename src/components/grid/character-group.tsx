@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import React, { useRef, useState } from 'react'
 import { CharacterGroup as CharGroup } from './character-grouping'
 import { GridCharButton } from './grid-character'
 
@@ -33,6 +34,21 @@ export const CharacterGroupComponent: React.FC<CharacterGroupProps> = ({
   const filteredChars = group.chars.filter(
     char => !showOnlySupported || isCodepointSupported(char.codePointAt(0) || 0)
   )
+  const parent = useRef<HTMLDivElement>(null)
+
+  const itemsPerRow = 10
+
+  const rows: Array<typeof filteredChars> = []
+  for (let i = 0; i < filteredChars.length; i += itemsPerRow) {
+    rows.push(filteredChars.slice(i, i + itemsPerRow))
+  }
+
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    estimateSize: () => 60,
+    getScrollElement: () => parent.current,
+    overscan: 5
+  })
 
   return (
     <details
@@ -45,34 +61,63 @@ export const CharacterGroupComponent: React.FC<CharacterGroupProps> = ({
           {group.name} ({filteredChars.length})
         </h3>
       </summary>
-      <div className="flex flex-wrap gap-1 group-open:my-2">
-        {(open ? filteredChars : []).map(char => {
-          const codePoint = char.codePointAt(0) || 0
-          const isInRegularSelection =
-            isSelecting &&
-            activeGroup === group.name &&
-            selectionRange.start !== null &&
-            selectionRange.end !== null &&
-            codePoint >= Math.min(selectionRange.start, selectionRange.end) &&
-            codePoint <= Math.max(selectionRange.start, selectionRange.end)
+      <div ref={parent} className="group-open:my-2 h-[360px] overflow-auto">
+        <div
+          className="w-full"
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            width: '100%',
+            position: 'relative'
+          }}
+        >
+          {rowVirtualizer.getVirtualItems().map(virtualRow => {
+            const rowChars = rows[virtualRow.index]
 
-          const isInAdditionalSelection =
-            additionalSelections.includes(codePoint)
+            return (
+              <div
+                key={virtualRow.index}
+                className="flex overflow-x-auto gap-1 absolute left-0 right-0"
+                style={{
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${virtualRow.start}px)`
+                }}
+              >
+                {rowChars.map((char, charIndex) => {
+                  const codePoint = char.codePointAt(0) || 0
+                  const isInRegularSelection =
+                    isSelecting &&
+                    activeGroup === group.name &&
+                    selectionRange.start !== null &&
+                    selectionRange.end !== null &&
+                    codePoint >=
+                      Math.min(selectionRange.start, selectionRange.end) &&
+                    codePoint <=
+                      Math.max(selectionRange.start, selectionRange.end)
 
-          return (
-            <GridCharButton
-              key={char}
-              char={char}
-              isInSelection={isInRegularSelection || isInAdditionalSelection}
-              handlePointerDown={handlePointerDown}
-              handlePointerUp={handlePointerUp}
-              codePoint={codePoint}
-              group={group}
-              handlePointerMove={handlePointerMove}
-              file={file}
-            />
-          )
-        })}
+                  const isInAdditionalSelection =
+                    additionalSelections.includes(codePoint)
+
+                  return (
+                    <GridCharButton
+                      style={{ marginTop: 4 }}
+                      key={charIndex}
+                      char={char}
+                      isInSelection={
+                        isInRegularSelection || isInAdditionalSelection
+                      }
+                      handlePointerDown={handlePointerDown}
+                      handlePointerUp={handlePointerUp}
+                      codePoint={codePoint}
+                      group={group}
+                      handlePointerMove={handlePointerMove}
+                      file={file}
+                    />
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
       </div>
     </details>
   )
