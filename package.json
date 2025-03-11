@@ -11,7 +11,6 @@
     "typecheck": "pnpm tsc --noEmit --project tsconfig.app.json"
   },
   "dependencies": {
-    "@lit/react": "^1.0.7",
     "@tailwindcss/vite": "^4.0.9",
     "@tanstack/react-query": "^5.66.11",
     "@tanstack/react-virtual": "^3.13.2",
@@ -22,14 +21,11 @@
     "@tiptap/starter-kit": "^2.11.5",
     "cva": "1.0.0-beta.3",
     "harfbuzzjs": "^0.4.4",
-    "lit": "^3.2.1",
     "pretty-bytes": "^6.1.1",
     "prosemirror-state": "^1.4.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-error-boundary": "^5.0.0",
-    "react-use": "^17.6.0",
-    "superjson": "^2.2.2",
     "woff2-encoder": "^2.0.0",
     "zustand": "^5.0.3"
   },
