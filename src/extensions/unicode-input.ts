@@ -15,12 +15,12 @@ export const UnicodeInput = Extension.create({
             const { $from } = selection
 
             const before = $from.parent.textBetween(
-              Math.max(0, $from.parentOffset - 6),
+              Math.max(0, $from.parentOffset - 8),
               $from.parentOffset,
               ''
             )
 
-            const match = /\\([0-9a-f]{4})$/.exec(before)
+            const match = /\\([0-9a-f]{4,})$/.exec(before)
 
             if (match) {
               const codePoint = parseInt(match[1], 16)
