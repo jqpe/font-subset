@@ -5,22 +5,8 @@
 @import './reset.css';
 
 :root {
-  color-scheme: light;
-  --foreground-color: #333;
-  --background-color: #eee;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --foreground-color: #b0b0b0;
-    --background-color: #171717;
-  }
-}
-
-:root {
-  color: var(--foreground-color);
-  background: var(--background-color);
+  color-scheme: light dark;
   font-family: system-ui, sans-serif;
   font-size: clamp(0.8rem, 1vi + 0.5rem, 2rem);
 }

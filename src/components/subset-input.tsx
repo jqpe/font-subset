@@ -16,7 +16,7 @@ export const SubsetInput: FC<SubsetInputProps> = ({
 }) => {
   const queryClient = useQueryClient()
   const inputClass =
-    'p-2 grow border-0 rounded-md bg-gray-50 shadow-md focus-visible:outline-0 text-gray-900'
+    'p-2 grow border-0 rounded-md bg-zinc-50 dark:bg-zinc-800 shadow-md focus-visible:outline-0 text-zinc-900 dark:text-zinc-100'
 
   const isCodePointInRange = (codePoint: number, range: string) => {
     const [start, end] = range.split('-').map(x => parseInt(x, 16))
@@ -47,7 +47,7 @@ export const SubsetInput: FC<SubsetInputProps> = ({
   return (
     <div className={className}>
       <form
-        className="flex items-center justify-between sticky top-2"
+        className="flex items-center justify-between sticky top-2 z-10"
         onSubmit={e => {
           e.preventDefault()
           queryClient.refetchQueries()
@@ -77,7 +77,7 @@ export const SubsetInput: FC<SubsetInputProps> = ({
           Create font
         </button>
       </form>
-      <aside className="text-xs text-gray-700 mt-2  ">
+      <aside className="text-xs text-zinc-700 dark:text-zinc-300 mt-2  ">
         <p>Control characters are not shown. Click or swipe to exclude.</p>
       </aside>
       <Grid unicode={unicode} setUnicode={setUnicode} />

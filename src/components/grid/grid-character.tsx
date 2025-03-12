@@ -1,6 +1,6 @@
+import { cx } from 'cva'
 import React, { CSSProperties } from 'react'
 import { CharacterGroup } from './character-grouping'
-import { cx } from 'cva'
 
 interface GridCharButtonProps {
   char: string
@@ -30,9 +30,10 @@ export const GridCharButton: React.FC<GridCharButtonProps> = ({
       style={style}
       data-in-selection={isInSelection}
       className={cx(
-        'flex flex-col items-center gap-1 border border-gray-300',
+        'flex flex-col items-center gap-1 border bg-zinc-50 dark:bg-zinc-700 dark:border-zinc-500 border-zinc-300',
         'w-8 rounded-sm p-1 transition-colors duration-300 select-none',
-        'hover:bg-red-200 data-[in-selection="true"]:bg-red-200 '
+        'hover:bg-red-200 dark:hover:bg-red-500 data-[in-selection="true"]:bg-red-200 dark:data-[in-selection="true"]:bg-red-500',
+        'data-[in-selection="true"]:border-transparent hover:border-transparent'
       )}
       onPointerDown={() => handlePointerDown(codePoint, group.name)}
       onPointerMove={() => handlePointerMove(codePoint, group.name)}
