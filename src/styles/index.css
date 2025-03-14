@@ -1,11 +1,40 @@
-@layer reset, theme, base, components, utilities;
+@layer reset, theme, colors, components, utilities;
+
+@import './colors.css';
+@import './reset.css';
+
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
 
-@import './reset.css';
+@theme inline {
+  --color-*: initial;
+  --color-gray-1: var(--color-gray-1);
+  --color-gray-2: var(--color-gray-2);
+  --color-gray-3: var(--color-gray-3);
+  --color-gray-4: var(--color-gray-4);
+  --color-gray-5: var(--color-gray-5);
+  --color-gray-6: var(--color-gray-6);
+  --color-gray-7: var(--color-gray-7);
+  --color-gray-8: var(--color-gray-8);
+  --color-gray-9: var(--color-gray-9);
+  --color-gray-10: var(--color-gray-10);
+  --color-gray-11: var(--color-gray-11);
+  --color-gray-12: var(--color-gray-12);
+  --color-red-1: var(--color-red-1);
+  --color-red-2: var(--color-red-2);
+  --color-red-3: var(--color-red-3);
+  --color-red-4: var(--color-red-4);
+  --color-red-5: var(--color-red-5);
+  --color-red-6: var(--color-red-6);
+  --color-red-7: var(--color-red-7);
+  --color-red-8: var(--color-red-8);
+  --color-red-9: var(--color-red-9);
+  --color-red-10: var(--color-red-10);
+  --color-red-11: var(--color-red-11);
+  --color-red-12: var(--color-red-12);
+}
 
 :root {
-
   color-scheme: light dark;
   font-family: system-ui, sans-serif;
   font-size: clamp(0.8rem, 1vi + 0.5rem, 2rem);

@@ -30,10 +30,11 @@ export const GridCharButton: React.FC<GridCharButtonProps> = ({
       style={style}
       data-in-selection={isInSelection}
       className={cx(
-        'flex flex-col items-center gap-1 border bg-zinc-50 dark:bg-zinc-700 dark:border-zinc-500 border-zinc-300',
-        'w-8 rounded-sm p-1 transition-colors duration-300 select-none',
-        'hover:bg-red-200 dark:hover:bg-red-500 data-[in-selection="true"]:bg-red-200 dark:data-[in-selection="true"]:bg-red-500',
-        'data-[in-selection="true"]:border-transparent hover:border-transparent'
+        'flex flex-col items-center gap-1 border bg-gray-2 border-gray-6',
+        'w-8 rounded-sm p-1 transition-[background] duration-300 select-none',
+        'hover:bg-red-4 data-[in-selection="true"]:bg-red-4',
+        'hover:border-red-8 data-[in-selection="true"]:border-red-8',
+        'focus-visible:outline-red-8 '
       )}
       onPointerDown={() => handlePointerDown(codePoint, group.name)}
       onPointerMove={() => handlePointerMove(codePoint, group.name)}

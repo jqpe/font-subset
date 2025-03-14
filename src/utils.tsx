@@ -48,7 +48,7 @@ export const createFallbackRenderer =
     return (
       <div
         role="alert"
-        className="bg-red-700 dark:bg-red-400 text-white p-1.5 rounded-sm w-fit"
+        className="bg-red-10 text-gray-1 p-1.5 rounded-sm w-fit"
       >
         <p>{error.message}</p>
         <FileInfo />

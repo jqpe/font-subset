@@ -1,19 +1,20 @@
 @layer reset {
-  /* Box sizing rules */
+  /* Base box-sizing rule */
   *,
-  *::before,
-  *::after {
+  ::before,
+  ::after {
     box-sizing: border-box;
   }
 
-  /* Prevent font size inflation */
   html {
+    line-height: 1.15;
     -moz-text-size-adjust: none;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
+    tab-size: 4;
   }
 
-  /* Remove default margin in favour of better control in authored CSS */
+  /* Reset margins */
   body,
   h1,
   h2,
@@ -29,19 +30,50 @@
     margin: 0;
   }
 
-  /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
-  ul[role='list'],
-  ol[role='list'] {
-    list-style: none;
-  }
-
-  /* Set core body defaults */
+  /* Body defaults */
   body {
     min-height: 100vh;
     line-height: 1.5;
   }
 
-  /* Set shorter line heights on headings and interactive elements */
+  /* Typography */
+  b,
+  strong {
+    font-weight: bolder;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family:
+      ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo,
+      monospace;
+    font-size: 1em;
+  }
+
+  small {
+    font-size: 80%;
+  }
+
+  /* Subscript/Superscript */
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+  /* Headings and interactive elements */
   h1,
   h2,
   h3,
@@ -54,7 +86,7 @@
     line-height: 1.1;
   }
 
-  /* Balance text wrapping on headings */
+  /* Modern text balance for headings */
   h1,
   h2,
   h3,
@@ -64,34 +96,89 @@
     text-wrap: balance;
   }
 
-  /* A elements that don't have a class get default styles */
-  a:not([class]) {
-    text-decoration-skip-ink: auto;
-    color: currentColor;
+  /* Tables */
+  table {
+    border-color: currentcolor;
   }
 
-  /* Make images easier to work with */
+  /* Forms */
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  /* iOS/Safari specific fixes */
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'] {
+    -webkit-appearance: button;
+  }
+
+  [type='search'] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+  }
+
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+  }
+
+  /* Lists */
+  ul[role='list'],
+  ol[role='list'] {
+    list-style: none;
+  }
+
+  /* Media */
   img,
   picture {
     max-width: 100%;
     display: block;
   }
 
-  /* Inherit fonts for inputs and buttons */
-  input,
-  button,
-  textarea,
-  select {
-    font-family: inherit;
-    font-size: inherit;
+  /* Links */
+  a:not([class]) {
+    text-decoration-skip-ink: auto;
+    color: currentColor;
   }
 
-  /* Make sure textareas without a rows attribute are not tiny */
+  /* Form elements */
+  legend {
+    padding: 0;
+  }
+
+  progress {
+    vertical-align: baseline;
+  }
+
   textarea:not([rows]) {
     min-height: 10em;
   }
 
-  /* Anything that has been anchored to should have extra scroll margin */
+  /* Spinner buttons */
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  /* Interactive elements */
+  summary {
+    display: list-item;
+  }
+
+  /* Anchor targets */
   :target {
     scroll-margin-block: 5ex;
   }

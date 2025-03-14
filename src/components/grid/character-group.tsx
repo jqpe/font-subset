@@ -54,10 +54,10 @@ export const CharacterGroupComponent: React.FC<CharacterGroupProps> = ({
     <details
       open={open}
       onToggle={() => setOpen(!open)}
-      className="w-full bg-zinc-400/10 dark:bg-zinc-600/15 p-2 group"
+      className="w-full bg-gray-2 p-2 group"
     >
       <summary className="flex select-none">
-        <h3 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <h3 className="text-sm font-medium text-gray-12">
           {group.name} ({filteredChars.length})
         </h3>
       </summary>

@@ -64,7 +64,7 @@ const ProcessedFont: FC<ProcessedFontProps> = ({ file, text }) => {
         <a
           href={downloadUrl}
           download={fileName}
-          className="block no-underline border border-zinc-300 dark:border-zinc-700 text-inherit px-2 py-0.5 text-center text-[0.7rem] rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-300"
+          className="block no-underline border border-gray-3 text-inherit px-2 py-0.5 text-center text-[0.7rem] rounded-full hover:bg-gray-1 transition-colors duration-300"
         >
           Download Subset
         </a>
