@@ -38,6 +38,9 @@
   color-scheme: light dark;
   font-family: system-ui, sans-serif;
   font-size: clamp(0.8rem, 1vi + 0.5rem, 2rem);
+  background-color: var(--color-gray-1);
+  color: var(--color-gray-12);
+
 }
 
 #root {
@@ -46,6 +49,15 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
+}
+
+@media (max-width: 40rem) {
+  #root {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 1rem;
+    justify-content: start;
+  }
 }
 
 p {
@@ -69,14 +81,10 @@ p {
 
 .card {
   padding: 1rem;
-  box-shadow: 0px 0px 0.1rem #b0b0b0;
+  box-shadow: 0px 0px 0.1rem var(--color-gray-6);
   border-radius: 1rem;
 }
 
 .card.card-full {
   grid-column: span 2;
-}
-
-[role='separator'][aria-orientation='vertical'] {
-  margin-inline: 1rem;
 }

@@ -62,7 +62,7 @@ export const useDrop = () => {
 }
 
 export const useProcessFont = (file: File | undefined, text = DEFAULT_TEXT) => {
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['process-font', file?.name],
     enabled: !!file,
     queryFn: async () => {
@@ -110,7 +110,7 @@ export const useProcessFont = (file: File | undefined, text = DEFAULT_TEXT) => {
     file,
     downloadUrl: data?.downloadUrl || null,
     fileName: data?.fileName || null,
-    isLoading,
+    isFetching,
     original: data?.original,
     subset: data?.subset
   }

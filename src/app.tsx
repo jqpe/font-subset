@@ -15,14 +15,14 @@ export const App = () => {
       <img
         fetchPriority="high"
         src="/background.avif"
-        className="fixed -z-50 inset-0 opacity-[2%]"
+        className="fixed -z-50 inset-0 opacity-[2%] h-full"
       />
 
-      <nav className="col-start-6 col-span-4 p-5 max-h-screen">
-        <SubsetInput className="py-5" unicode={unicode} onChange={setUnicode} />
+      <nav className="col-start-6 col-span-4 sm:p-5 max-h-screen bg-gray-1 z-10">
+        <SubsetInput unicode={unicode} onChange={setUnicode} />
       </nav>
 
-      <main className="h-full col-start-2 col-end-6 row-start-1 row-end-10 py-8 sticky top-0">
+      <main className="col-start-2 col-end-6 row-start-1 row-end-10 py-8 sticky top-0">
         <h1>Create a subset of your font.</h1>
         <p className="max-w-md">
           Drag and drop a font anywhere on the page.
@@ -46,10 +46,15 @@ interface ProcessedFontProps {
   text?: string
 }
 const ProcessedFont: FC<ProcessedFontProps> = ({ file, text }) => {
-  const { downloadUrl, fileName, original, subset } = useProcessFont(file, text)
+  const { downloadUrl, fileName, original, subset, isFetching } =
+    useProcessFont(file, text)
 
   const info = new Info(original || null, subset || null)
   const [axes, setAxes] = useState<Record<string, number>>()
+
+  if (isFetching) {
+    return 'Creating a new subset...'
+  }
 
   if (!(downloadUrl && fileName)) {
     return null

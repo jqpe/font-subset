@@ -54,7 +54,7 @@ export const CharacterGroupComponent: React.FC<CharacterGroupProps> = ({
     <details
       open={open}
       onToggle={() => setOpen(!open)}
-      className="w-full bg-gray-2 p-2 group"
+      className="w-full bg-gray-3 p-2 group"
     >
       <summary className="flex select-none">
         <h3 className="text-sm font-medium text-gray-12">
