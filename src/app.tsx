@@ -3,11 +3,12 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { FontPreview } from './components/font-preview'
 import { SubsetInput } from './components/subset-input'
 import { VariationAxesControls } from './components/variation-axes'
-import { useDrop, useProcessFont } from './hooks'
+import { useDrop, useFileStore, useProcessFont } from './hooks'
 import { createFallbackRenderer, Info, toTextFromUnicode } from './utils'
 
 export const App = () => {
   const file = useDrop()
+  const setFile = useFileStore(store => store.setFile)
   const [unicode, setUnicode] = useState('0-7f')
 
   return (
@@ -31,6 +32,24 @@ export const App = () => {
           </span>
         </p>
 
+        {!file && (
+          <div className="card border-1 border-dashed border-gray-6 my-6 text-center hover:bg-gray-2 transition-colors">
+            <label className="text-gray-11 p-10 block">
+              <input
+                type="file"
+                accept=".ttf,.otf,.woff,.woff2"
+                className="hidden"
+                onChange={e => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    setFile(file)
+                  }
+                }}
+              />
+              Choose a font or drop anywhere.
+            </label>
+          </div>
+        )}
         <ErrorBoundary
           resetKeys={[file]}
           fallbackRender={createFallbackRenderer(file)}
