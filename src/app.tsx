@@ -14,12 +14,14 @@ export const App = () => {
   return (
     <>
       <img
+        role="presentation"
+        alt=""
         fetchPriority="high"
         src="/background.avif"
-        className="fixed -z-50 inset-0 opacity-[2%] h-full"
+        className="fixed inset-0 -z-50 h-full w-full opacity-[2%]"
       />
 
-      <nav className="col-start-6 col-span-4 sm:p-5 max-h-screen bg-gray-1 z-10">
+      <nav className="col-start-6 col-span-4 sm:p-5 max-h-screen z-10">
         <SubsetInput unicode={unicode} onChange={setUnicode} />
       </nav>
 

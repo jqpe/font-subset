@@ -40,7 +40,6 @@
   font-size: clamp(0.8rem, 1vi + 0.5rem, 2rem);
   background-color: var(--color-gray-1);
   color: var(--color-gray-12);
-
 }
 
 #root {
